@@ -1,6 +1,7 @@
 package com.example.voicerecorder;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -14,6 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,6 +27,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     private MyFTPClientFunctions ftpclient = null;
+    public FTPClient mFTPClient = null; // Add top of the class
 
     Button recordBtn;
     //Button saveBtn;
@@ -32,6 +38,33 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
 
     private static final int REQUEST_PERMISSION_CODE = 1000;
+
+    public boolean ftpConnect(String host, String username, String password, int port, Context context) {
+        try {
+            mFTPClient = new FTPClient();
+            // connecting to the host
+            mFTPClient.connect(host, port);
+            boolean status = mFTPClient.login(username, password);
+            // now check the reply code, if positive mean connection success
+            if (FTPReply.isPositiveCompletion(mFTPClient.getReplyCode())) {
+                // login using username & password
+
+                /*
+                 * Set File Transfer Mode
+                 * To avoid corruption issue you must specified a correct
+                 * transfer mode, such as ASCII_FILE_TYPE, BINARY_FILE_TYPE,
+                 * EBCDIC_FILE_TYPE .etc. Here, I use BINARY_FILE_TYPE for
+                 * transferring text, image, and compressed files.
+                 */
+                mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
+                mFTPClient.enterLocalPassiveMode();
+                return status;
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, "Fail to connect to FTP", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,20 +77,24 @@ public class MainActivity extends AppCompatActivity {
         recordBtn = findViewById(R.id.recordBtn);
         //saveBtn = findViewById(R.id.saveBtn);
 
-        MainActivity.this.runOnUiThread(new Runnable() {
-            public void run() {
-                boolean status = false;
-                // host – your FTP address
-                // username & password – for your secured login
-                // 21 default gateway for FTP
-                status = ftpclient.ftpConnect("ftp.mngo.in", "aditya@mngo.in", "1980AMS{4534&MNgo}", 21, MainActivity.this);
-                if (status == true) {
-                    Toast.makeText(MainActivity.this, "connection success", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "connection failed", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        //ftpConnect("www.mngo.in", "aditya@mngo.in", "1980AMS{4534&MNgo}", 21, MainActivity.this);
+
+        ftpConnect("103.250.184.230", "aditya@mngo.in", "1980AMS{4534&MNgo}", 21, MainActivity.this);
+
+//        MainActivity.this.runOnUiThread(new Runnable() {
+//            public void run() {
+//                boolean status = false;
+//                // host – your FTP address
+//                // username & password – for your secured login
+//                // 21 default gateway for FTP
+//                status = ftpclient.ftpConnect("ftp.mngo.in", "aditya@mngo.in", "1980AMS{4534&MNgo}", 21, MainActivity.this);
+//                if (status == true) {
+//                    Toast.makeText(MainActivity.this, "connection success", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(MainActivity.this, "connection failed", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
         if(checkPermissionFromDevice())
         {
