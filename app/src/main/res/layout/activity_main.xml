@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Voice Recorder App"
+        android:textSize="60px"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"/>
+
+    <TextView
+        android:id="@+id/sampleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Say this sentence after pressing record button \n\n &quot;The quick brown fox jumps over the lazy dog&quot;"
+        android:layout_above="@+id/recordBtn"
+        android:textColor="@android:color/black"
+        android:textAlignment="center"
+        android:textSize="80px"/>
+
+    <Button
+        android:id="@+id/recordBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Record"
+        android:layout_margin="10px"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
+    <!--<Button-->
+        <!--android:id="@+id/saveBtn"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Save"-->
+        <!--android:layout_margin="10px"-->
+        <!--android:background="@android:color/holo_green_dark"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:layout_below="@+id/recordBtn"-->
+        <!--android:layout_centerHorizontal="true"/>-->
+
+</RelativeLayout>
