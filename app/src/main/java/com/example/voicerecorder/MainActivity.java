@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         //ftpConnect("www.mngo.in", "aditya@mngo.in", "1980AMS{4534&MNgo}", 21, MainActivity.this);
 
-        ftpConnect("103.250.184.230", "aditya@mngo.in", "1980AMS{4534&MNgo}", 21, MainActivity.this);
+        //ftpConnect("103.250.184.230", "aditya@mngo.in", "1980AMS{4534&MNgo}", 21, MainActivity.this);
 
 //        MainActivity.this.runOnUiThread(new Runnable() {
 //            public void run() {
