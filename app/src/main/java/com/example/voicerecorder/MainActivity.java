@@ -1,8 +1,6 @@
 package com.example.voicerecorder;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -23,25 +21,43 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button recordBtn;
+    private MyFTPClientFunctions ftpclient = null;
 
+    Button recordBtn;
     //Button saveBtn;
 
     String path = "";
 
     MediaRecorder mediaRecorder;
-   MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer;
 
     private static final int REQUEST_PERMISSION_CODE = 1000;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recordBtn = findViewById(R.id.recordBtn);
+        ftpclient = new MyFTPClientFunctions();
 
+        recordBtn = findViewById(R.id.recordBtn);
         //saveBtn = findViewById(R.id.saveBtn);
+
+        MainActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                boolean status = false;
+                // host – your FTP address
+                // username & password – for your secured login
+                // 21 default gateway for FTP
+                status = ftpclient.ftpConnect("ftp.mngo.in", "aditya@mngo.in", "1980AMS{4534&MNgo}", 21, MainActivity.this);
+                if (status == true) {
+                    Toast.makeText(MainActivity.this, "connection success", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "connection failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         if(checkPermissionFromDevice())
         {
@@ -83,13 +99,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-
-//            saveBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                }
-//            });
         }
         else
         {
@@ -155,5 +164,4 @@ public class MainActivity extends AppCompatActivity {
 
         return (write_external_storage_result == PackageManager.PERMISSION_GRANTED) && (record_audio_result == PackageManager.PERMISSION_GRANTED);
     }
-
 }
